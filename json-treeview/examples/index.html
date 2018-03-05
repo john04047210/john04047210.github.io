@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Json TreeView</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="../dist/jsontreeview.css" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <h1>JSON TreeView Example</h1>
+      <div class="row">
+        <div class="col-md-4 col-lg-3">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="btn-checkable" value="1"> Checkable
+          </label>
+          <label class="checkbox-inline hide">
+            <input type="checkbox" id="btn-checkable-multi" value="1" disabled> Multi
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" id="btn-editable" value="1"> Editable
+          </label>
+          <div id="example"></div>
+        </div>
+        <div class="col-md-8 col-lg-8">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-12 col-md-12">
+                  <button class="btn btn-primary" id="showTreejson">show tree json</button>
+                  <pre class="pre-scrollable" id="treeJson"></pre>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6 col-md-6">
+                  <span>Click Events</span>
+                  <pre class="pre-scrollable" id="click_event"></pre>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <span>Selected Node Info</span>
+                  <pre class="pre-scrollable" id="select_node_info"></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://fb.me/react-15.0.1.js"></script>
+    <script src="https://fb.me/react-dom-15.0.1.js"></script>
+    <script src="../dist/jsontreeview.js"></script>
+    <script>
+        var treejson = [
+          {
+            id: 1,
+            title: "item1",
+            icon: "",
+            state: {
+              expand: true,
+              selected: false,
+              checked: false
+            },
+            children: [{
+              id: 11,
+              title: 'item1-1',
+              icon: "",
+              state: {
+                expand: false,
+                selected: false,
+                checked: true
+              },
+              children: []
+            },{
+              id: 12,
+              title: 'item1-2',
+              icon: "",
+              state: {
+                expand: false,
+                selected: false,
+                checked: false
+              },
+              children: [{
+                id: 121,
+                title: 'item1-2-1',
+                icon: "",
+                state: {
+                  expand: false,
+                  selected: false,
+                  checked: true
+                },
+                children: []
+              },{
+                id: 122,
+                title: 'item1-2-2',
+                icon: "",
+                state: {
+                  expand: false,
+                  selected: false,
+                  checked: false
+                },
+                children: []
+              }]
+            }]
+          },{
+            id: 2,
+            title: "item2",
+            icon: "",
+            state: {
+              expand: false,
+              selected: false,
+              checked: false
+            },
+            children: []
+          },{
+            id: 3,
+            title: "item3",
+            icon: "",
+            state: {
+              expand: false,
+              selected: false,
+              checked: false
+            },
+            children: []
+          },{
+            id: 4,
+            title: "item4",
+            icon: "",
+            state: {
+              expand: false,
+              selected: false,
+              checked: false
+            },
+            children: []
+          }
+        ]
+
+        var element = document.getElementById('example');
+        var editor = new JSONTreeView(element, {
+            data: treejson,
+            isCheckable: $('#btn-checkable').is(':checked'),
+            isEditable: $('#btn-editable').is(':checked'),
+            onClick: function(node){
+              clicktree(node);
+            }
+        });
+        function clicktree(node) {
+          $('#click_event').append(node.id+'-->'+node.title+'<br/>');
+          $('#select_node_info').text(JSON.stringify(node, null, 4));
+        }
+        $('#btn-checkable').on('change', function(){
+          editor.setValue({
+            data: treejson,
+            isCheckable: $('#btn-checkable').is(':checked'),
+            isEditable: $('#btn-editable').is(':checked'),
+            onClick: function(node){
+              clicktree(node);
+            }
+          });
+        });
+        $('#btn-editable').on('change', function(){
+          editor.setValue({
+            data: treejson,
+            isCheckable: $('#btn-checkable').is(':checked'),
+            isEditable: $('#btn-editable').is(':checked'),
+            onClick: function(node){
+              clicktree(node);
+            }
+          });
+        });
+        $('#showTreejson').on('click', function(){
+          let tmp = editor.getValue();
+          $('#treeJson').text(JSON.stringify(tmp, null, 4));
+        });
+    </script>
+  </body>
+</html>
