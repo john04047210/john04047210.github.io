@@ -1170,6 +1170,7 @@ var TreeView = function (_React$Component2) {
       data: props.data
     };
     _this3.handleClick = _this3.handleClick.bind(_this3);
+    _this3.handlePlus = _this3.handlePlus.bind(_this3);
     return _this3;
   }
 
@@ -1197,6 +1198,29 @@ var TreeView = function (_React$Component2) {
       this.props.onClick(node);
     }
   }, {
+    key: 'handlePlus',
+    value: function handlePlus(event) {
+      if (this.props.isEditable) {
+        var newData = this.state.data.slice();
+        newData.push({
+          id: Date.now(),
+          title: 'new node',
+          icon: "",
+          state: {
+            expand: false,
+            selected: false,
+            checked: false
+          },
+          children: []
+        });
+        this.setState(function () {
+          return { data: newData };
+        });
+      } else {
+        event.preventDefault();
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -1206,7 +1230,12 @@ var TreeView = function (_React$Component2) {
           'ul',
           { className: 'list-group' },
           _react2.default.createElement(TreeViewChild, { onClick: this.handleClick, data: this.state.data,
-            isCheckable: this.props.isCheckable, isEditable: this.props.isEditable, parents: [], level: 0 })
+            isCheckable: this.props.isCheckable, isEditable: this.props.isEditable, parents: [], level: 0 }),
+          this.props.isEditable ? _react2.default.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default', onClick: this.handlePlus },
+            _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true' })
+          ) : ''
         )
       );
     }
